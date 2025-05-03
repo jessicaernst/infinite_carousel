@@ -142,6 +142,12 @@ class MyCardContent extends StatelessWidget {
 
 ---
 
+## 📄 Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for release history and version notes.
+
+---
+
 ## 🪪 License
 
 MIT License. Use freely and responsibly.
