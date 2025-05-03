@@ -120,6 +120,12 @@ class MyCardContent extends StatelessWidget {
 
 ---
 
+## 📷 Screenshot
+
+![Screenshot 2025-05-03 at 22 13 14](https://github.com/user-attachments/assets/4dc6ae00-743e-49e0-b4ae-b76841673484)
+
+---
+
 ## 🛠 Maintainers
 
 - Jessica Ernst `@jessicaernst`
