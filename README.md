@@ -10,6 +10,7 @@ A customizable and beautiful infinite carousel widget for Flutter apps. Supports
 - 🔳 Active/inactive card styling
 - 🧩 Accepts custom card content via builder
 - 🎨 Optional gradients, shadows, scaling, and size customization
+- 🧱 Customize card container with `activeCardBuilder` & `inactiveCardBuilder`
 - ⚙️ Highly configurable for flexible design integration
 
 ---
@@ -23,7 +24,7 @@ dependencies:
   infinite_carousel:
     git:
       url: https://github.com/jessicaernst/infinite_carousel.git
-      ref: v1.0.0
+      ref: v1.1.0
 ```
 
 Then run:
@@ -39,32 +40,36 @@ flutter pub get
 ### Basic Example
 
 ```dart
-InfiniteCarousel<MyModel>(
-  items: myItemList,
+InfiniteCarousel(
+  items: myItems.map((item) => InfiniteCarouselItem(content: MyCardContent(item: item))).toList(),
+)
+```
+
+### Advanced Example with custom wrappers
+
+```dart
+InfiniteCarousel(
+  items: myItems.map((item) => InfiniteCarouselItem(content: MyCardContent(item: item))).toList(),
   cardWidth: 228,
   cardHeight: 347,
   inactiveScale: 0.9,
-  itemBuilder: (context, isActive, item) {
-    return isActive
-        ? ActiveCarouselCardContainer(child: MyCardContent(item: item, isActive: true))
-        : InactiveCarouselCardContainer(child: MyCardContent(item: item, isActive: false));
-  },
-),
+  activeCardBuilder: (child) => ActiveNewsCarouselCard(content: child),
+  inactiveCardBuilder: (child) => InactiveNewsCarouselCard(content: child),
+)
 ```
 
 ---
 
 ## 🧩 Parameters
 
-| Parameter        | Type                           | Description                                             |
-|------------------|--------------------------------|---------------------------------------------------------|
-| `items`          | `List<T>`                      | The list of data items to display in the carousel       |
-| `itemBuilder`    | `(context, isActive, item) =>` | Function to build your card widget                      |
-| `cardWidth`      | `double`                       | `228.0` | Width of each carousel card                   |
-| `cardHeight`     | `double`                       | `347.0` | Height of each carousel card                  |
-| `inactiveScale`  | `double`                       | `0.9`   | Scale factor for inactive cards               |
-| `shadowColor`    | `Color?`                       | Optional override for inactive shadow                   |
-| `useGradient`    | `bool`                         | Whether gradient is enabled (default: `true`)           |
+| Parameter              | Type                              | Default   | Description                                               |
+|------------------------|-----------------------------------|-----------|-----------------------------------------------------------|
+| `items`                | `List<InfiniteCarouselItem>`      | required  | The items to display in the carousel                      |
+| `cardWidth`            | `double`                          | `228.0`   | Width of each carousel card                               |
+| `cardHeight`           | `double`                          | `347.0`   | Height of each carousel card                              |
+| `inactiveScale`        | `double`                          | `0.9`     | Scale factor for inactive cards                           |
+| `activeCardBuilder`    | `Widget Function(Widget child)?`  | optional  | Custom wrapper for the active card                        |
+| `inactiveCardBuilder`  | `Widget Function(Widget child)?`  | optional  | Custom wrapper for the inactive cards                     |
 
 ---
 
@@ -85,7 +90,9 @@ flutter:
     - assets/images/
 ```
 
-### Example Card Content
+---
+
+### 🖼️ Example Card Content
 
 You are free to implement your own content widget. Example:
 
@@ -101,6 +108,7 @@ class MyCardContent extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(isActive ? 14.5 : 11.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Image.asset(item.imageAsset),
           Text(item.title),
@@ -129,7 +137,7 @@ class MyCardContent extends StatelessWidget {
 
 ## 🛠 Maintainers
 
-- Jessica Ernst `@jessicaernst`
+- Jessica Ernst `@jessicaernst`  
 - Contributions welcome!
 
 ---

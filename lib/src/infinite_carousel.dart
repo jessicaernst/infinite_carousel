@@ -153,7 +153,7 @@ class _InfiniteCarouselState extends State<InfiniteCarousel> {
         alignment: Alignment.center,
         child: SizedBox(
           width: cardWidth,
-          height: cardHeight,
+          height: cardHeight * scale,
           child:
               isActive
                   ? GestureDetector(
