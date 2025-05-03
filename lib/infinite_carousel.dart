@@ -1,5 +1,5 @@
 library;
 
-export 'src/active_news_carousel_card.dart';
-export 'src/inactive_news_carousel_card.dart';
-export 'src/news_carousel.dart';
+export 'src/active_infinite_carousel_card.dart';
+export 'src/inactive_infinite_carousel_card.dart';
+export 'src/infinite_carousel.dart';

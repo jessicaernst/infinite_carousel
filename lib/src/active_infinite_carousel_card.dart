@@ -1,8 +1,9 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
-class ActiveNewsCarouselCard extends StatelessWidget {
-  const ActiveNewsCarouselCard({super.key, required this.child});
+class ActiveInfiniteCarouselCard extends StatelessWidget {
+  const ActiveInfiniteCarouselCard({super.key, required this.child});
 
   final Widget child;
 
@@ -14,10 +15,10 @@ class ActiveNewsCarouselCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
-              color: Theme.of(context).cardColor.withOpacity(0.6),
+              color: Theme.of(context).cardColor.withAlpha((0.6 * 255).round()),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.15),
+                  color: Colors.black.withAlpha((0.15 * 255).round()),
                   blurRadius: 20,
                 ),
               ],
@@ -33,12 +34,12 @@ class ActiveNewsCarouselCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
                 gradient: LinearGradient(
                   colors: [
-                    Colors.white.withOpacity(0.3),
-                    Colors.white.withOpacity(0.1),
+                    Colors.white.withAlpha((0.3 * 255).round()),
+                    Colors.white.withAlpha((0.1 * 255).round()),
                   ],
                 ),
                 border: Border.all(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withAlpha((0.3 * 255).round()),
                   width: 0.7,
                 ),
               ),

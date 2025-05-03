@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'active_news_carousel_card.dart';
-import 'inactive_news_carousel_card.dart';
 
-class NewsCarouselItem {
+import 'active_infinite_carousel_card.dart';
+import 'inactive_infinite_carousel_card.dart';
+
+class InfiniteCarouselItem {
   final Widget content;
 
-  const NewsCarouselItem({required this.content});
+  const InfiniteCarouselItem({required this.content});
 }
 
-class NewsCarousel extends StatefulWidget {
-  const NewsCarousel({
+class InfiniteCarousel extends StatefulWidget {
+  const InfiniteCarousel({
     super.key,
     required this.items,
     this.cardWidth = 228,
@@ -17,16 +18,16 @@ class NewsCarousel extends StatefulWidget {
     this.inactiveScale = 0.9,
   });
 
-  final List<NewsCarouselItem> items;
+  final List<InfiniteCarouselItem> items;
   final double cardWidth;
   final double cardHeight;
   final double inactiveScale;
 
   @override
-  State<NewsCarousel> createState() => _NewsCarouselState();
+  State<InfiniteCarousel> createState() => _InfiniteCarouselState();
 }
 
-class _NewsCarouselState extends State<NewsCarousel> {
+class _InfiniteCarouselState extends State<InfiniteCarousel> {
   static const int _multiplier = 1000;
   late final PageController _controller;
   double currentPage = 0.0;
@@ -130,8 +131,8 @@ class _NewsCarouselState extends State<NewsCarousel> {
 
     final cardWrapper =
         isActive
-            ? ActiveNewsCarouselCard(child: item.content)
-            : InactiveNewsCarouselCard(child: item.content);
+            ? ActiveInfiniteCarouselCard(child: item.content)
+            : InactiveInfiniteCarouselCard(child: item.content);
 
     return Positioned(
       top: verticalOffset,
