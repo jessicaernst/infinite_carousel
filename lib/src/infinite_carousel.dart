@@ -5,7 +5,6 @@ import 'inactive_infinite_carousel_card.dart';
 
 class InfiniteCarouselItem {
   final Widget content;
-
   const InfiniteCarouselItem({required this.content});
 }
 
@@ -16,12 +15,20 @@ class InfiniteCarousel extends StatefulWidget {
     this.cardWidth = 228,
     this.cardHeight = 347,
     this.inactiveScale = 0.9,
+    this.activeCardBuilder,
+    this.inactiveCardBuilder,
   });
 
   final List<InfiniteCarouselItem> items;
   final double cardWidth;
   final double cardHeight;
   final double inactiveScale;
+
+  /// Optional custom active card wrapper
+  final Widget Function(Widget child)? activeCardBuilder;
+
+  /// Optional custom inactive card wrapper
+  final Widget Function(Widget child)? inactiveCardBuilder;
 
   @override
   State<InfiniteCarousel> createState() => _InfiniteCarouselState();
@@ -129,10 +136,14 @@ class _InfiniteCarouselState extends State<InfiniteCarousel> {
             ? delta * (cardWidth - overlapFactor)
             : delta * (cardWidth - overlapFactor * 1.6));
 
+    final child = item.content;
+
     final cardWrapper =
         isActive
-            ? ActiveInfiniteCarouselCard(child: item.content)
-            : InactiveInfiniteCarouselCard(child: item.content);
+            ? (widget.activeCardBuilder?.call(child) ??
+                ActiveInfiniteCarouselCard(child: child))
+            : (widget.inactiveCardBuilder?.call(child) ??
+                InactiveInfiniteCarouselCard(child: child));
 
     return Positioned(
       top: verticalOffset,
