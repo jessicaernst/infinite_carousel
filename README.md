@@ -24,7 +24,7 @@ dependencies:
   infinite_carousel:
     git:
       url: https://github.com/jessicaernst/infinite_carousel.git
-      ref: v1.1.0
+      ref: v1.1.1
 ```
 
 Then run:
