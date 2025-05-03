@@ -22,7 +22,7 @@ Add the dependency to your `pubspec.yaml`:
 dependencies:
   infinite_carousel:
     git:
-      url: https://github.com/YOUR_USERNAME/infinite_carousel.git
+      url: https://github.com/jessicaernst/infinite_carousel.git
 ```
 
 Then run:
