@@ -17,6 +17,7 @@ class InfiniteCarousel extends StatefulWidget {
     this.inactiveScale = 0.9,
     this.activeCardBuilder,
     this.inactiveCardBuilder,
+    this.physics = const BouncingScrollPhysics(),
   });
 
   final List<InfiniteCarouselItem> items;
@@ -29,6 +30,9 @@ class InfiniteCarousel extends StatefulWidget {
 
   /// Optional custom inactive card wrapper
   final Widget Function(Widget child)? inactiveCardBuilder;
+
+  /// The physics to use for scrolling. Defaults to `BouncingScrollPhysics`.
+  final ScrollPhysics physics;
 
   @override
   State<InfiniteCarousel> createState() => _InfiniteCarouselState();
@@ -95,6 +99,7 @@ class _InfiniteCarouselState extends State<InfiniteCarousel> {
         children: [
           PageView.builder(
             controller: _controller,
+            physics: widget.physics,
             itemCount: widget.items.length * _multiplier,
             itemBuilder: (_, __) => const SizedBox.shrink(),
           ),
