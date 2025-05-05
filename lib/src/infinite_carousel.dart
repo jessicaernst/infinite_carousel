@@ -3,11 +3,19 @@ import 'package:flutter/material.dart';
 import 'active_infinite_carousel_card.dart';
 import 'inactive_infinite_carousel_card.dart';
 
+/// Represents a single item to be displayed in the [InfiniteCarousel].
 class InfiniteCarouselItem {
+  /// The main content widget for this carousel item.
   final Widget content;
+
+  /// Creates an instance of [InfiniteCarouselItem].
+  ///
+  /// Requires [content] which is the widget to be displayed.
   const InfiniteCarouselItem({required this.content});
 }
 
+/// A Flutter widget that displays a list of items in an infinitely scrollable
+/// horizontal carousel with a snapping effect and scaling for inactive items.
 class InfiniteCarousel extends StatefulWidget {
   const InfiniteCarousel({
     super.key,
@@ -22,24 +30,36 @@ class InfiniteCarousel extends StatefulWidget {
     this.animationCurve = Curves.easeOut,
   });
 
+  /// The list of [InfiniteCarouselItem]s to display.
   final List<InfiniteCarouselItem> items;
+
+  /// The width of each card in the carousel. Defaults to 228.
   final double cardWidth;
+
+  /// The height of each card in the carousel. Defaults to 347.
   final double cardHeight;
+
+  /// The scale factor applied to inactive cards (cards not in the center).
+  /// Defaults to 0.9. Must be between 0.0 and 1.0.
   final double inactiveScale;
 
-  /// Optional custom active card wrapper
+  /// Optional builder function to customize the appearance of the active
+  /// (center) card. It receives the original `child` widget.
   final Widget Function(Widget child)? activeCardBuilder;
 
-  /// Optional custom inactive card wrapper
+  /// Optional builder function to customize the appearance of inactive cards.
+  /// It receives the original `child` widget.
   final Widget Function(Widget child)? inactiveCardBuilder;
 
-  /// The physics to use for scrolling. Defaults to `BouncingScrollPhysics`.
+  /// The physics to use for the underlying [PageView] scrolling behavior.
+  /// Defaults to `BouncingScrollPhysics`.
   final ScrollPhysics physics;
 
-  /// The duration of the animation when snapping to a page.
+  /// The duration of the animation when the carousel snaps to the nearest page.
+  /// Defaults to 300 milliseconds.
   final Duration animationDuration;
 
-  /// The curve of the animation when snapping to a page.
+  /// The curve used for the snapping animation. Defaults to `Curves.easeOut`.
   final Curve animationCurve;
 
   @override
