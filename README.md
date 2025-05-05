@@ -12,6 +12,7 @@ A customizable and beautiful infinite carousel widget for Flutter apps. Supports
 - 🎨 Optional gradients, shadows, scaling, and size customization
 - 🧱 Customize card container with `activeCardBuilder` & `inactiveCardBuilder`
 - ⚙️ Highly configurable for flexible design integration
+- 🧭 **Custom scroll physics support via `physics` parameter**
 
 ---
 
