@@ -18,6 +18,8 @@ class InfiniteCarousel extends StatefulWidget {
     this.activeCardBuilder,
     this.inactiveCardBuilder,
     this.physics = const BouncingScrollPhysics(),
+    this.animationDuration = const Duration(milliseconds: 300),
+    this.animationCurve = Curves.easeOut,
   });
 
   final List<InfiniteCarouselItem> items;
@@ -33,6 +35,12 @@ class InfiniteCarousel extends StatefulWidget {
 
   /// The physics to use for scrolling. Defaults to `BouncingScrollPhysics`.
   final ScrollPhysics physics;
+
+  /// The duration of the animation when snapping to a page.
+  final Duration animationDuration;
+
+  /// The curve of the animation when snapping to a page.
+  final Curve animationCurve;
 
   @override
   State<InfiniteCarousel> createState() => _InfiniteCarouselState();
@@ -176,8 +184,8 @@ class _InfiniteCarouselState extends State<InfiniteCarousel> {
                         final nearestPage = _controller.page?.round() ?? 0;
                         _controller.animateToPage(
                           nearestPage,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
+                          duration: widget.animationDuration,
+                          curve: widget.animationCurve,
                         );
                       }
                     },

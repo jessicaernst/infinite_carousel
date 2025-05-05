@@ -4,7 +4,14 @@ All notable changes to the `infinite_carousel` package will be documented in thi
 
 ---
 
-## 1.1.2
+## [1.1.3] - 2025-05-06
+
+- **FEAT**: Made animation duration and curve configurable via `animationDuration` and `animationCurve` parameters.
+- **FEAT**: Changed default animation curve to `Curves.easeOut` for a smoother default snapping behavior.
+
+---
+
+## [1.1.2] – 2025-05-05
 
 - **FEAT**: Made scroll physics configurable via the `physics` parameter.
 - **FEAT**: Changed default scroll physics to `BouncingScrollPhysics` for a smoother, less rigid feel.

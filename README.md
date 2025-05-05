@@ -13,6 +13,7 @@ A customizable and beautiful infinite carousel widget for Flutter apps. Supports
 - 🧱 Customize card container with `activeCardBuilder` & `inactiveCardBuilder`
 - ⚙️ Highly configurable for flexible design integration
 - 🧭 **Custom scroll physics support via `physics` parameter**
+- ⏱️ **Configurable animation duration and curve for snapping**
 
 ---
 
@@ -25,7 +26,7 @@ dependencies:
   infinite_carousel:
     git:
       url: https://github.com/jessicaernst/infinite_carousel.git
-      ref: v1.1.1
+      ref: v1.1.3
 ```
 
 Then run:
