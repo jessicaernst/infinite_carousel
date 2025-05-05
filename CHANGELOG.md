@@ -4,6 +4,15 @@ All notable changes to the `infinite_carousel` package will be documented in thi
 
 ---
 
+## 1.1.2
+
+- **FEAT**: Made scroll physics configurable via the `physics` parameter.
+- **FEAT**: Changed default scroll physics to `BouncingScrollPhysics` for a smoother, less rigid feel.
+
+---
+
+## 1.1.1
+
 ## [1.1.1] – 2025-05-03
 ### Fixed
 - 🛠 Inactive cards are now vertically centered correctly (matches previous manual layout).
