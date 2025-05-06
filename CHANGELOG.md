@@ -4,6 +4,12 @@ All notable changes to the `infinite_carousel` package will be documented in thi
 
 ---
 
+## [1.1.4] - 2024-05-07
+
+- **DOCS**: Added Dart documentation comments (`///`) to `InfiniteCarousel` and its parameters for better IDE support (hover tooltips).
+
+---
+
 ## [1.1.3] - 2025-05-06
 
 - **FEAT**: Made animation duration and curve configurable via `animationDuration` and `animationCurve` parameters.
