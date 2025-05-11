@@ -28,6 +28,8 @@ class InfiniteCarousel extends StatefulWidget {
     this.physics = const BouncingScrollPhysics(),
     this.animationDuration = const Duration(milliseconds: 300),
     this.animationCurve = Curves.easeOut,
+    this.initialItem,
+    this.onActiveItemChanged,
   });
 
   /// The list of [InfiniteCarouselItem]s to display.
@@ -62,6 +64,13 @@ class InfiniteCarousel extends StatefulWidget {
   /// The curve used for the snapping animation. Defaults to `Curves.easeOut`.
   final Curve animationCurve;
 
+  /// The index of the item to be initially displayed in the center.
+  /// If null, the carousel will start at the logical center of the multiplied items.
+  final int? initialItem;
+
+  /// Callback function that is called when the active (center) item changes.
+  final void Function(int index)? onActiveItemChanged;
+
   @override
   State<InfiniteCarousel> createState() => _InfiniteCarouselState();
 }
@@ -70,27 +79,99 @@ class _InfiniteCarouselState extends State<InfiniteCarousel> {
   static const int _multiplier = 1000;
   late final PageController _controller;
   double currentPage = 0.0;
+  int? _lastReportedPage;
 
   @override
   void initState() {
-    final initialPage = widget.items.length * _multiplier ~/ 2;
+    super.initState();
+    int initialPage;
+    if (widget.initialItem != null &&
+        widget.initialItem! >= 0 &&
+        widget.initialItem! < widget.items.length) {
+      // Calculate the initialPage to center the desired initialItem
+      // We want widget.initialItem to be at items.length * _multiplier / 2 + widget.initialItem
+      // but since PageView is 0-indexed, we find a page in the middle block
+      // that corresponds to initialItem.
+      initialPage =
+          (widget.items.length * _multiplier ~/ 2) -
+          (widget.items.length ~/ 2) +
+          widget.initialItem!;
+    } else {
+      initialPage = widget.items.length * _multiplier ~/ 2;
+    }
+
     _controller = PageController(
       initialPage: initialPage,
       viewportFraction: 1.0,
     );
     _controller.addListener(() {
       setState(() {
-        currentPage = _controller.page ?? currentPage;
+        currentPage = _controller.page ?? initialPage.toDouble();
       });
+      _handleActiveItemChanged();
     });
-    currentPage = initialPage.toDouble();
-    super.initState();
+    currentPage = initialPage.toDouble(); // Initialize currentPage
+    // Call initially for the first item
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _handleActiveItemChanged();
+    });
+  }
+
+  @override
+  void didUpdateWidget(InfiniteCarousel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.items.isEmpty) {
+      // If items become empty, not much to do with initialItem.
+      // The build method handles displaying an empty state.
+      return;
+    }
+
+    // Check if initialItem has changed or if the number of items has changed
+    // (as this affects page calculation, though a change in items.length
+    // would typically recreate the widget via a new Key).
+    // We primarily care about initialItem changing for a stable set of items.
+    if (widget.initialItem != oldWidget.initialItem ||
+        widget.items.length != oldWidget.items.length) {
+      int newTargetPage;
+      if (widget.initialItem != null &&
+          widget.initialItem! >= 0 &&
+          widget.initialItem! < widget.items.length) {
+        newTargetPage =
+            (widget.items.length * _multiplier ~/ 2) -
+            (widget.items.length ~/ 2) +
+            widget.initialItem!;
+      } else {
+        // Default to center if initialItem is null or invalid
+        newTargetPage = widget.items.length * _multiplier ~/ 2;
+      }
+
+      if (_controller.hasClients &&
+          _controller.page?.round() != newTargetPage) {
+        _controller.jumpToPage(newTargetPage);
+        // The PageController's listener will handle updating `currentPage`
+        // and calling `_handleActiveItemChanged`.
+      }
+    }
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _handleActiveItemChanged() {
+    if (widget.onActiveItemChanged != null && _controller.page != null) {
+      final currentActualPage =
+          (_controller.page!.round() % widget.items.length +
+              widget.items.length) %
+          widget.items.length;
+      if (_lastReportedPage != currentActualPage) {
+        _lastReportedPage = currentActualPage;
+        widget.onActiveItemChanged!(currentActualPage);
+      }
+    }
   }
 
   @override
