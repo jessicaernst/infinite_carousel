@@ -4,14 +4,18 @@ All notable changes to the `infinite_carousel` package will be documented in thi
 
 ---
 
-## [1.1.5] - 2024-05-08
+## [1.1.6] - 2025-05-12
+
+- **FEAT**: Added optional `controller` parameter to allow providing an external `PageController` for more fine-grained control over the carousel's state.
+
+## [1.1.5] - 2025-05-08
 
 - **FEAT**: Added optional `initialItem` parameter to specify the initially centered item.
 - **FEAT**: Added optional `onActiveItemChanged` callback to listen for changes in the active (centered) item.
 
 ---
 
-## [1.1.4] - 2024-05-07
+## [1.1.4] - 2025-05-07
 
 - **DOCS**: Added Dart documentation comments (`///`) to `InfiniteCarousel` and its parameters for better IDE support (hover tooltips).
 

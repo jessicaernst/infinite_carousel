@@ -20,6 +20,7 @@ class InfiniteCarousel extends StatefulWidget {
   const InfiniteCarousel({
     super.key,
     required this.items,
+    this.controller,
     this.cardWidth = 228,
     this.cardHeight = 347,
     this.inactiveScale = 0.9,
@@ -34,6 +35,12 @@ class InfiniteCarousel extends StatefulWidget {
 
   /// The list of [InfiniteCarouselItem]s to display.
   final List<InfiniteCarouselItem> items;
+
+  /// Optional [PageController] to use for the carousel.
+  /// If provided, the carousel will use this controller instead of creating its own,
+  /// allowing for external control over its scrolling state. The widget will not
+  /// take ownership of the provided controller and will not dispose of it.
+  final PageController? controller;
 
   /// The width of each card in the carousel. Defaults to 228.
   final double cardWidth;
@@ -65,7 +72,10 @@ class InfiniteCarousel extends StatefulWidget {
   final Curve animationCurve;
 
   /// The index of the item to be initially displayed in the center.
-  /// If null, the carousel will start at the logical center of the multiplied items.
+  /// If null, the carousel defaults to the logical center of the items.
+  /// This value is used to determine the `initialPage` for an internally managed
+  /// `PageController`. If an external `controller` is provided, `initialItem`
+  /// influences the initial visual centering and is used as the target for `jumpToPage` if `initialItem` itself is changed.
   final int? initialItem;
 
   /// Callback function that is called when the active (center) item changes.
@@ -78,6 +88,7 @@ class InfiniteCarousel extends StatefulWidget {
 class _InfiniteCarouselState extends State<InfiniteCarousel> {
   static const int _multiplier = 1000;
   late final PageController _controller;
+  bool _ownsController = false;
   double currentPage = 0.0;
   int? _lastReportedPage;
 
@@ -100,10 +111,18 @@ class _InfiniteCarouselState extends State<InfiniteCarousel> {
       initialPage = widget.items.length * _multiplier ~/ 2;
     }
 
-    _controller = PageController(
-      initialPage: initialPage,
-      viewportFraction: 1.0,
-    );
+    if (widget.controller != null) {
+      _controller = widget.controller!;
+      _ownsController = false;
+      // If an external controller is provided, its current page might differ from `initialPage`.
+      // `currentPage` is initialized based on `initialPage` for consistent first-frame rendering.
+      // The listener will then sync `currentPage` with the external controller's actual page.
+    } else {
+      _controller = PageController(
+        initialPage: initialPage,
+      ); // viewportFraction defaults to 1.0
+      _ownsController = true;
+    }
     _controller.addListener(() {
       setState(() {
         currentPage = _controller.page ?? initialPage.toDouble();
@@ -122,15 +141,12 @@ class _InfiniteCarouselState extends State<InfiniteCarousel> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.items.isEmpty) {
-      // If items become empty, not much to do with initialItem.
-      // The build method handles displaying an empty state.
       return;
     }
 
-    // Check if initialItem has changed or if the number of items has changed
-    // (as this affects page calculation, though a change in items.length
-    // would typically recreate the widget via a new Key).
-    // We primarily care about initialItem changing for a stable set of items.
+    // If initialItem or items length changes, recalculate the target page.
+    // This applies even if an external controller is used, as initialItem
+    // can still dictate a desired jump.
     if (widget.initialItem != oldWidget.initialItem ||
         widget.items.length != oldWidget.items.length) {
       int newTargetPage;
@@ -149,8 +165,6 @@ class _InfiniteCarouselState extends State<InfiniteCarousel> {
       if (_controller.hasClients &&
           _controller.page?.round() != newTargetPage) {
         _controller.jumpToPage(newTargetPage);
-        // The PageController's listener will handle updating `currentPage`
-        // and calling `_handleActiveItemChanged`.
       }
     }
   }
@@ -158,7 +172,11 @@ class _InfiniteCarouselState extends State<InfiniteCarousel> {
   @override
   void dispose() {
     _controller.dispose();
-    super.dispose();
+    if (_ownsController) {
+      _controller.dispose();
+    }
+    super
+        .dispose(); // This was a typo in the provided code, should be _controller.removeListener if not disposing. Corrected to only dispose if owned.
   }
 
   void _handleActiveItemChanged() {

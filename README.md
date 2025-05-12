@@ -16,6 +16,7 @@ A customizable and beautiful infinite carousel widget for Flutter apps. Supports
 - ⏱️ **Configurable animation duration and curve for snapping**
 - 🎯 **Optional `initialItem` to specify the starting item**
 - 📢 **Optional `onActiveItemChanged` callback for active item changes**
+- 🕹️ **Optional `controller` to use an external `PageController`**
 
 ---
 
@@ -27,8 +28,8 @@ Add the dependency to your `pubspec.yaml`:
 dependencies:
   infinite_carousel:
     git:
-      url: https://github.com/jessicaernst/infinite_carousel.git # Replace with your repo URL if different
-      ref: v1.1.5 # Or your specific tag/branch
+      url: https://github.com/jessicaernst/infinite_carousel.git
+      ref: v1.1.6 
 ```
 
 Then run:
@@ -57,8 +58,8 @@ InfiniteCarousel(
   cardWidth: 228,
   cardHeight: 347,
   inactiveScale: 0.9,
-+  activeCardBuilder: (child) => ActiveNewsCarouselCard(content: child), // Your custom active card wrapper
-+  inactiveCardBuilder: (child) => InactiveNewsCarouselCard(content: child), // Your custom inactive card wrapper
++  activeCardBuilder: (child) => ActiveNewsCarouselCard(content: child),
++  inactiveCardBuilder: (child) => InactiveNewsCarouselCard(content: child), 
 +)
 +```
 +
@@ -67,11 +68,9 @@ InfiniteCarousel(
 +```dart
 +InfiniteCarousel(
 +  items: myItems.map((item) => InfiniteCarouselItem(content: MyCardContent(item: item))).toList(),
-+  initialItem: 2, // Start with the 3rd item (index 2) centered
++  initialItem: 2,
 +  onActiveItemChanged: (index) {
 +    print('Active item changed to index: $index');
-+    // You can use this to update your app's state, e.g., with Riverpod:
-+    // ref.read(activeCarouselIndexProvider.notifier).update(index);
 +  },
   activeCardBuilder: (child) => ActiveNewsCarouselCard(content: child),
   inactiveCardBuilder: (child) => InactiveNewsCarouselCard(content: child),
@@ -99,10 +98,21 @@ InfiniteCarousel(
 +| `physics`              | `ScrollPhysics`                       | `BouncingScrollPhysics()`        | Scroll physics for the carousel                                             |
 +| `animationDuration`    | `Duration`                            | `Duration(milliseconds: 300)`    | Duration of the snapping animation                                          |
 +| `animationCurve`       | `Curve`                               | `Curves.easeOut`                 | Curve for the snapping animation                                            |
-+| `initialItem`          | `int?`                                | `null`                           | Index of the item to be initially displayed in the center                   |
-+| `onActiveItemChanged`  | `void Function(int index)?`           | `null`                           | Callback when the active (center) item changes                              |
+| Parameter              | Type                                  | Default                          | Description                                                                                               |
+|------------------------|---------------------------------------|----------------------------------|-----------------------------------------------------------------------------------------------------------|
+| `items`                | `List<InfiniteCarouselItem>`          | required                         | The items to display in the carousel                                                                      |
+| `controller`           | `PageController?`                     | `null`                           | Optional external `PageController` for fine-grained control. If null, an internal controller is created. |
+| `cardWidth`            | `double`                              | `228.0`                          | Width of each carousel card                                                                               |
+| `cardHeight`           | `double`                              | `347.0`                          | Height of each carousel card                                                                              |
+| `inactiveScale`        | `double`                              | `0.9`                            | Scale factor for inactive cards                                                                           |
+| `activeCardBuilder`    | `Widget Function(Widget child)?`      | optional                         | Custom wrapper for the active card                                                                        |
+| `inactiveCardBuilder`  | `Widget Function(Widget child)?`      | optional                         | Custom wrapper for the inactive cards                                                                     |
+| `physics`              | `ScrollPhysics`                       | `BouncingScrollPhysics()`        | Scroll physics for the carousel                                                                           |
+| `animationDuration`    | `Duration`                            | `Duration(milliseconds: 300)`    | Duration of the snapping animation                                                                        |
+| `animationCurve`       | `Curve`                               | `Curves.easeOut`                 | Curve for the snapping animation                                                                          |
+| `initialItem`          | `int?`                                | `null`                           | Index of the item to be initially displayed in the center. Used if no external `controller` is provided. |
+| `onActiveItemChanged`  | `void Function(int index)?`           | `null`                           | Callback when the active (center) item changes                                                            |
 
----
 
 ## 🧪 Example App
 
